@@ -142,7 +142,7 @@ async function cmdView (interaction) {
 
     // Explanatory strings
     const ttlString = `\n-# The amount of time before the bot will forget a message.`;
-    const limitString = `\n-# The number of times a message should be duplicated into other channels before the bot flag it as cross-post spam.`;
+    const limitString = `\n-# The number of times a message should be duplicated into other channels before the bot flags it as cross-post spam.`;
     const unbanString = `\n-# Determines if the bot should immediately unban the users it bans. Helpful if you're especially worried about false positives.`;
 
     // Embed
