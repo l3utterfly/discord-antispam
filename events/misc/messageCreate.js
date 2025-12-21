@@ -11,8 +11,15 @@ async function execute (message) {
     if (message.author.bot || message.author.system) return; // Ignore bot messages.
     if (message.content === "") return; //  Ignore empty messages.
 
+    // Retrieve settings data
+    const dbFile = new KeyvSqlite('sqlite://DATA/settings.sqlite');
+    const keyv = new Keyv(dbFile, { namespace: 'config' });
+
+    const expiration = await keyv.get('ttl_seconds');
+    const limit = await keyv.get('limit_count');
+
     // Store this message in the database.
-    const appended = await appendToDB(message);
+    const appended = await appendToDB(message, expiration);
 
     // console.log(appended);
 
@@ -21,7 +28,7 @@ async function execute (message) {
     // Count the instances of each message.
     const postCounts = await countCrossPosts(retrieved);
     // Filter out messages that appear less than the given limit.
-    const crossPosts = await filterPostCounts(postCounts, 3);
+    const crossPosts = await filterPostCounts(postCounts, limit);
     // Get the first user who cross-posted, if any.
     const crossPoster = await getFirstCrossPoster(retrieved, crossPosts);
 
@@ -47,7 +54,7 @@ async function execute (message) {
  * @param {object} message - Message data object from Discord API
  * @returns true or false, depending on if the data was written.
  */
-async function appendToDB (message) {
+async function appendToDB (message, expiration) {
     const dbFile = new KeyvSqlite('sqlite://DATA/msgcache.sqlite');
     const keyv = new Keyv(dbFile, { namespace: 'cache' });
     // keyv.clear(); // this erases all data in the namespace.
@@ -57,7 +64,7 @@ async function appendToDB (message) {
     DataObj["channel"] = message.channel.id;
     DataObj["content"] = message.content;
     DataObj["db_id"] = now;
-    const set = await keyv.set(now, DataObj, 120 * 1000);
+    const set = await keyv.set(now, DataObj, expiration * 1000);
     return set;
 }
 

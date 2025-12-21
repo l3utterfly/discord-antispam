@@ -78,7 +78,7 @@ async function cmdLimitation (interaction) {
     const dbFile = new KeyvSqlite('sqlite://DATA/settings.sqlite');
     const keyv = new Keyv(dbFile, { namespace: 'config' });
 
-    const isSet = keyv.set('limit_count', expSeconds);
+    const isSet = keyv.set('limit_count', limitCount);
 
     if (isSet) {
         interaction.reply({ content: `Limit set to ${limitCount}.`, flags: [MessageFlags.Ephemeral] });
