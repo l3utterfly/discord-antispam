@@ -12,7 +12,7 @@ async function execute (message) {
     if (message.content === "") return; //  Ignore empty messages.
 
     // Retrieve settings data
-    const dbFile = new KeyvSqlite('sqlite://DATA/settings.sqlite');
+    const dbFile = new KeyvSqlite(`sqlite://DATA/${message.guild.id}-settings.sqlite`);
     const keyv = new Keyv(dbFile, { namespace: 'config' });
 
     const expiration = await keyv.get('ttl_seconds') || 120;
@@ -25,7 +25,7 @@ async function execute (message) {
     // console.log(appended);
 
     // Get all messages from the database.
-    const retrieved = await pullNamespace();
+    const retrieved = await pullNamespace(message.guild.id);
     // Count the instances of each message.
     const postCounts = await countCrossPosts(retrieved);
     // Filter out messages that appear less than the given limit.
@@ -59,7 +59,7 @@ async function execute (message) {
  * @returns true or false, depending on if the data was written.
  */
 async function appendToDB (message, expiration) {
-    const dbFile = new KeyvSqlite('sqlite://DATA/msgcache.sqlite');
+    const dbFile = new KeyvSqlite(`sqlite://DATA/${message.guild.id}-msgcache.sqlite`);
     const keyv = new Keyv(dbFile, { namespace: 'cache' });
     // keyv.clear(); // this erases all data in the namespace.
     const now = Date.now();
@@ -76,8 +76,8 @@ async function appendToDB (message, expiration) {
  * Get all data from the namespace.
  * @returns object containing all data from the namespace, if any.
  */
-async function pullNamespace () {
-    const dbFile = new KeyvSqlite('sqlite://DATA/msgcache.sqlite');
+async function pullNamespace (guildId) {
+    const dbFile = new KeyvSqlite(`sqlite://DATA/${guildId}-msgcache.sqlite`);
     const keyv = new Keyv(dbFile, { namespace: 'cache' });
     const allData = {};
     let counter = 0;
