@@ -74,6 +74,7 @@ async function appendToDB (message, expiration) {
 
 /**
  * Get all data from the namespace.
+ * @param {String} guildId - Identifier for the target guild's database. 
  * @returns object containing all data from the namespace, if any.
  */
 async function pullNamespace (guildId) {
