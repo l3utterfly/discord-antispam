@@ -18,7 +18,13 @@ Navigate to the "Bot" page. There you'll find further customisation options, and
 
 ### 2. Start The Bot
 With this project's files downloaded to your host machine, open the directory containing them in your CLI. Run the following command:
+
+`npm install`
+
+That installs the dependencies (DiscordJS, Keyv SQLite). Once that's done, run:
+
 `node .`
+
 This starts the bot process. Note that the bot should be runnning before you add it to your server. This way, the bot can deploy its slash commands to the server.
 
 ### 3. Add The Bot To Your Server
