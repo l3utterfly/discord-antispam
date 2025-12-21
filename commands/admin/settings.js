@@ -16,6 +16,7 @@ command.addSubcommand(subcommand => {
     subcommand.addNumberOption(option => {
         option.setName('seconds');
         option.setDescription("Must be > 4, not recommended above 120.");
+        option.setRequired(true);
         return option;
     });
     return subcommand;
@@ -26,6 +27,7 @@ command.addSubcommand(subcommand => {
     subcommand.addNumberOption(option => {
         option.setName('count');
         option.setDescription("Must be > 1, recommended > 3.");
+        option.setRequired(true);
         return option;
     });
     return subcommand;
@@ -36,8 +38,29 @@ command.setDefaultMemberPermissions(PermissionFlagsBits.Administrator);
  * ============= MAIN FUNCTION ==============
  */
 async function execute(interaction) {
-    console.log(interaction);
+    const subcommand = interaction.options._subcommand;
+    switch (subcommand) {
+        case 'expiration':
+            cmdExpiration(interaction);
+            break;
+        case 'limitation':
+            cmdLimitation(interaction);
+            break;
+        default:
+            interaction.reply({ content: 'Unknown subcommand.', flags: [MessageFlags.Ephemeral] });
+    }
     return;
+}
+
+/**
+ * ============= COMMAND FUNCTIONS ================
+ */
+async function cmdExpiration (interaction) {
+    const expSeconds = interaction.options._hoistedOptions.value;
+}
+
+async function cmdLimitation (interaction) {
+    const limitCount = interaction.options._hoistedOptions.value;
 }
 
 /**
