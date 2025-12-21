@@ -22,7 +22,7 @@ With this project's files downloaded to your host machine, open the directory co
 This starts the bot process. Note that the bot should be runnning before you add it to your server. This way, the bot can deploy its slash commands to the server.
 
 ### 3. Add The Bot To Your Server
-On your application dashboard, under "Installation", de-select "User Install" from the "Installation Methods" section. Within the "Default Install Settings" under "Scopes", select "bot" and under "Permissions" select "Ban Members", "Use Slash Commands". 
+On your application dashboard, under "Installation", de-select "User Install" from the "Installation Methods" section. Within the "Default Install Settings" under "Scopes", select "bot" and under "Permissions" select "Ban Members", "Use Slash Commands". You may also want to select "Administrator" to make things easier.
 
 In the "Install Link" section, copy the default link provided by Discord. Upon opening that link, Discord should display instructions for adding the bot to your server.
 
