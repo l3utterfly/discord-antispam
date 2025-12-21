@@ -3,6 +3,8 @@
  */
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageFlags, PermissionFlagsBits } = require('discord.js');
+const { Keyv } = require('keyv');
+const { KeyvSqlite } = require('@keyv/sqlite');
 
 /**
  * ============= SLASH COMMAND ==============
@@ -56,11 +58,33 @@ async function execute(interaction) {
  * ============= COMMAND FUNCTIONS ================
  */
 async function cmdExpiration (interaction) {
-    const expSeconds = interaction.options._hoistedOptions.value;
+    const expSeconds = interaction.options._hoistedOptions[0].value;
+
+    const dbFile = new KeyvSqlite('sqlite://DATA/settings.sqlite');
+    const keyv = new Keyv(dbFile, { namespace: 'config' });
+
+    const isSet = keyv.set('ttl_seconds', expSeconds);
+
+    if (isSet) {
+        interaction.reply({ content: `Expiration set to ${expSeconds} seconds.`, flags: [MessageFlags.Ephemeral] });
+    } else {
+        interaction.reply({ content: "There was a problem setting the expiration...", flags: [MessageFlags.Ephemeral] });
+    }
 }
 
 async function cmdLimitation (interaction) {
-    const limitCount = interaction.options._hoistedOptions.value;
+    const limitCount = interaction.options._hoistedOptions[0].value;
+
+    const dbFile = new KeyvSqlite('sqlite://DATA/settings.sqlite');
+    const keyv = new Keyv(dbFile, { namespace: 'config' });
+
+    const isSet = keyv.set('limit_count', expSeconds);
+
+    if (isSet) {
+        interaction.reply({ content: `Limit set to ${limitCount}.`, flags: [MessageFlags.Ephemeral] });
+    } else {
+        interaction.reply({ content: "There was a problem setting the limit...", flags: [MessageFlags.Ephemeral] });
+    }
 }
 
 /**
