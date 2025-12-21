@@ -1,0 +1,2 @@
+# Anti-Spam Discord Bot
+This is a simple commonJS Discord bot created with DiscordJS v14 and Keyv v5. The purpose is to be a very simple and light solution to preventing cross-posting (when a user, typically a compromised account, posts the same message in many or every channel of a Discord server, usually with malicious links or to shill some crypto scam).
