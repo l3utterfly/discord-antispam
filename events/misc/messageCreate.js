@@ -15,8 +15,9 @@ async function execute (message) {
     const dbFile = new KeyvSqlite('sqlite://DATA/settings.sqlite');
     const keyv = new Keyv(dbFile, { namespace: 'config' });
 
-    const expiration = await keyv.get('ttl_seconds');
-    const limit = await keyv.get('limit_count');
+    const expiration = await keyv.get('ttl_seconds') || 120;
+    const limit = await keyv.get('limit_count') || 2;
+    const unban = await keyv.get('immediate_unban') || false;
 
     // Store this message in the database.
     const appended = await appendToDB(message, expiration);
@@ -42,6 +43,9 @@ async function execute (message) {
 
     // Ban the user who cross-posted.
     banCrossPoster(crossPoster, guild);
+    if (unban) {
+        unbanCrossPoster(crossPoster, guild);
+    }
 
     // Currently only message content is what's tracked. 
     // If the user cross-posts by uploading the same file to several channels,
@@ -150,6 +154,17 @@ async function getFirstCrossPoster (cache, crossPosts) {
  */
 async function banCrossPoster (crossPosterId, guildObj) {
     guildObj.members.ban(crossPosterId, { deleteMessageSeconds: 7 * 24 * 60 * 60, reason: "User flagged for cross-posting." } ).catch(err => {
+        console.log(err);
+    });
+}
+
+/**
+ * Unban the given user from the given guild.
+ * @param {String} crossPosterId - Discord user ID of the target to unban.
+ * @param {Object} guildObj - Object of the guild in which the target is found cross-posting.
+ */
+async function unbanCrossPoster (crossPosterId, guildObj) {
+    guildObj.members.unban(crossPosterId, { reason: "Immediate unban is enabled." } ).catch(err => {
         console.log(err);
     });
 }
