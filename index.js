@@ -1,6 +1,8 @@
+require('dotenv').config();
+
 const fs = require('fs');
 const { Client, Collection, GatewayIntentBits, MessageFlags } = require('discord.js');
-const { token } = require('./config.json');
+const { token } = require('./config.js');
 
 const client = new Client({ 
     intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent]
@@ -49,3 +51,7 @@ client.on('interactionCreate', async interaction => {
 });
 
 client.login(token);
+
+// keep bot alive for hosting platforms with health checks
+const http = require('http');
+http.createServer((_, res) => res.end('Bot is running')).listen(process.env.PORT || 3000);
