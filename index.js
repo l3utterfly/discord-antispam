@@ -1,5 +1,3 @@
-require('dotenv').config();
-
 const fs = require('fs');
 const { Client, Collection, GatewayIntentBits, MessageFlags } = require('discord.js');
 const { token } = require('./config.js');
